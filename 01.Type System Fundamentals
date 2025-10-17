@@ -1,0 +1,199 @@
+
+# **Topic 1: Type System Fundamentals**
+
+TypeScript’s type system is the foundation that allows you to catch errors at compile-time instead of runtime. A solid understanding here is **critical for senior interviews**.
+
+---
+
+## **1️⃣ Core Concepts**
+
+### 1. Basic Types
+
+| Type                 | Description                                         | Example                                                 |
+| -------------------- | --------------------------------------------------- | ------------------------------------------------------- |
+| `string`             | Textual data                                        | `let name: string = "Rahil";`                           |
+| `number`             | Numeric values                                      | `let age: number = 25;`                                 |
+| `boolean`            | True/false values                                   | `let isAdmin: boolean = true;`                          |
+| `any`                | Disables type checking                              | `let something: any = 10;`                              |
+| `unknown`            | Safe alternative to `any`                           | `let input: unknown;`                                   |
+| `never`              | Indicates code that never returns (throws or loops) | `function fail(): never { throw new Error("Fail") }`    |
+| `void`               | Function returns nothing                            | `function log(msg: string): void { console.log(msg); }` |
+| `null` & `undefined` | Represents absence of value                         | `let x: null = null;`                                   |
+
+### 2. Literal Types
+
+You can restrict values to **specific literals**.
+
+```ts
+type Direction = "up" | "down" | "left" | "right";
+let move: Direction;
+move = "up";    // ✅ valid
+move = "forward"; // ❌ error
+```
+
+### 3. Union & Intersection Types
+
+* **Union (`|`)**: value can be one of several types.
+
+```ts
+let value: string | number;
+value = "hello";
+value = 42;
+```
+
+* **Intersection (`&`)**: value must satisfy multiple types.
+
+```ts
+interface User { name: string; }
+interface Employee { id: number; }
+
+type EmployeeUser = User & Employee;
+const e: EmployeeUser = { name: "Rahil", id: 123 };
+```
+
+### 4. Tuple Types
+
+* Fixed-length arrays with specific types.
+
+```ts
+let rgb: [number, number, number] = [255, 0, 0];
+```
+
+### 5. Enums
+
+* Named constants for better readability.
+
+```ts
+enum Role { Admin = "ADMIN", User = "USER", Guest = "GUEST" }
+const myRole: Role = Role.Admin;
+```
+
+### 6. Type Inference
+
+* TypeScript infers type if not explicitly declared.
+
+```ts
+let count = 10; // inferred as number
+```
+
+* Can override inferred type:
+
+```ts
+let count: string = "10";
+```
+
+---
+
+## **2️⃣ Advanced Concepts in Fundamentals**
+
+1. **`unknown` vs `any`**:
+
+   * `any` disables type checking.
+   * `unknown` forces type checks before usage.
+
+```ts
+let data: unknown;
+data = "hello";
+
+if (typeof data === "string") {
+  console.log(data.toUpperCase()); // ✅ safe
+}
+```
+
+2. **`never` usage in exhaustive checks**
+
+```ts
+type Shape = "circle" | "square";
+function assertNever(x: never): never {
+  throw new Error("Unexpected value: " + x);
+}
+
+function area(shape: Shape, size: number) {
+  switch (shape) {
+    case "circle": return Math.PI * size * size;
+    case "square": return size * size;
+    default: return assertNever(shape);
+  }
+}
+```
+
+---
+
+## **3️⃣ Real-World Production Examples (10)**
+
+1. **API Response Validation**
+
+```ts
+type APIResponse = { success: true; data: User } | { success: false; error: string };
+```
+
+2. **Redux Action Types**
+
+```ts
+type Action = { type: "INCREMENT" } | { type: "DECREMENT" };
+```
+
+3. **Form Field Values**
+
+```ts
+type FormValue = string | number | null;
+```
+
+4. **Database Record Models**
+
+```ts
+interface User { id: number; name: string; email: string | null; }
+```
+
+5. **Configuration Files**
+
+```ts
+type Config = { host: string; port: number; debug: boolean };
+```
+
+6. **UI Component Props**
+
+```ts
+interface ButtonProps {
+  label: string;
+  onClick: () => void;
+  size?: "small" | "medium" | "large";
+}
+```
+
+7. **Enums for Role-Based Access**
+
+```ts
+enum UserRole { Admin, Moderator, User }
+```
+
+8. **Error Handling**
+
+```ts
+type ErrorResult = { code: number; message: string } | null;
+```
+
+9. **Strict Null Checks in Functions**
+
+```ts
+function greet(name: string | null) {
+  if (name) console.log("Hello " + name);
+}
+```
+
+10. **Tuple for Coordinates**
+
+```ts
+type Coordinate = [number, number];
+const point: Coordinate = [10, 20];
+```
+
+---
+
+## ✅ **Summary of Topic 1**
+
+* Mastering **basic types, literals, unions/intersections, tuples, enums** is foundational.
+* **`unknown` and `never`** are key for type safety and exhaustive checks.
+* Real-world usage ranges from **API models, Redux actions, UI props, DB models** — everything in production relies on these fundamentals.
+
+---
